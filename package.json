@@ -1,0 +1,50 @@
+{
+  "name": "waku-meme-board",
+  "version": "0.0.1",
+  "description": "Waku Meme Board built with vite",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "npm run build && test-browser-example test"
+  },
+  "dependencies": {
+    "@helia/interface": "^1.2.1",
+    "@helia/unixfs": "^1.4.0",
+    "@radix-ui/react-form": "^0.0.3",
+    "@waku/interfaces": "^0.0.15",
+    "@waku/sdk": "^0.0.16",
+    "blockstore-idb": "^1.1.1",
+    "datastore-idb": "^2.1.2",
+    "helia": "^1.3.8",
+    "multiformats": "^12.0.1",
+    "protobufjs": "^7.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.36.1",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.70",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.4",
+    "@tailwindcss/typography": "^0.5.9",
+    "@types/node": "^20.4.4",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "prettier": "^3.0.0",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.6"
+  }
+}
