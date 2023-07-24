@@ -9,5 +9,5 @@ export function Waku() {
     return <NetworkConnector network="Waku" />;
   }
 
-  return <Node network="Waku" id={"waku.id"} status={"offline"} />;
+  return <Node network="Waku" id={waku.id} status={waku.status} />;
 }
