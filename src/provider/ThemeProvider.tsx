@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import type { ChildrenProp, Theme, ToggleThemeCallback } from "../type";
+import type { ChildrenProp, Theme, ToggleThemeCallback } from "../types/type";
 
 export const ThemeContext = createContext<{
   theme?: Theme | null;

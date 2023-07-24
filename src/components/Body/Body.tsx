@@ -1,4 +1,4 @@
-import type { ChildrenProp } from "../../type";
+import type { ChildrenProp } from "../../types/type";
 import { Footer } from "./Footer/Footer";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";

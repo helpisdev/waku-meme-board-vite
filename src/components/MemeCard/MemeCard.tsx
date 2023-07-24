@@ -1,4 +1,4 @@
-import type { Aspect } from "../../type";
+import type { Aspect } from "../../types/type";
 
 interface Props {
   src: string;

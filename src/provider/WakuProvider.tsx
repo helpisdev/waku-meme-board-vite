@@ -15,14 +15,9 @@ import type {
   Waku,
 } from "@waku/interfaces";
 import type { Encoder, Decoder } from "@waku/sdk";
-import type {
-  ChildrenProp,
-  NodeStatus,
-  Meme,
-  WakuInterface,
-  MemeFormat,
-  ReceiveMemeCallback,
-} from "../type";
+import type { ChildrenProp, NodeStatus } from "../types/type";
+import type { ReceiveMemeCallback, WakuInterface } from "../types/waku";
+import type { Meme, MemeFormat } from "../types/meme";
 
 export const WakuContext = createContext<WakuInterface>({
   waku: null,

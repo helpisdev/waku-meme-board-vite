@@ -1,4 +1,4 @@
-import type { NodeStatus } from "../../type";
+import type { NodeStatus } from "../../types/type";
 
 interface Props {
   network: string;

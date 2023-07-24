@@ -1,5 +1,6 @@
-import type { AcceptedMemeFormatMime, CardType, ObjectType } from "./type";
-import { MemeFormat } from "./type";
+import type { CardType, ObjectType } from "./types/type";
+import type { AcceptedMemeFormatMime } from "./types/meme";
+import { MemeFormat } from "./types/meme";
 import { Type, Field } from "protobufjs";
 
 export const conf = {

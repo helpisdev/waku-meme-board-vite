@@ -8,7 +8,9 @@ import { useEffect, useState, useCallback, createContext } from "react";
 import { formatToMimeMapping } from "../util";
 
 import type { Helia } from "@helia/interface";
-import type { ChildrenProp, NodeStatus, Meme, HeliaInterface } from "../type";
+import type { ChildrenProp, NodeStatus } from "../types/type";
+import type { HeliaInterface } from "../types/helia";
+import type { Meme } from "../types/meme";
 
 export const HeliaContext = createContext<HeliaInterface>({
   helia: null,
