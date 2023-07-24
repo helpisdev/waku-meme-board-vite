@@ -1,10 +1,10 @@
-import { UnixFS, unixfs } from "@helia/unixfs";
+import { unixfs, type UnixFS } from "@helia/unixfs";
 import { defaultLibp2p } from "@waku/sdk";
 import { IDBBlockstore } from "blockstore-idb";
 import { IDBDatastore } from "datastore-idb";
 import { createHelia } from "helia";
 import { CID } from "multiformats";
-import { createContext, useCallback, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { formatToMimeMapping } from "../util";
 
 import type { Helia } from "@helia/interface";
@@ -31,7 +31,7 @@ async function closeIDBStores() {
   await blockstore.close();
 }
 
-export function HeliaProvider({ children }: ChildrenProp) {
+export function HeliaProvider({ children }: ChildrenProp): React.ReactNode {
   const [helia, setHelia] = useState<Helia | null>(null);
   const [fs, setFs] = useState<UnixFS | null>(null);
   const [starting, setStarting] = useState<boolean>(true);
@@ -40,7 +40,7 @@ export function HeliaProvider({ children }: ChildrenProp) {
   const [status, setStatus] = useState<NodeStatus>("offline");
 
   const startHelia = useCallback(async () => {
-    if (!helia) {
+    if (helia == null) {
       try {
         console.info("Starting Helia");
         await datastore.open();
@@ -62,15 +62,15 @@ export function HeliaProvider({ children }: ChildrenProp) {
     return () => {
       closeIDBStores();
     };
-  }, []);
+  }, [helia]);
 
   useEffect(() => {
     startHelia();
-  }, []);
+  }, [startHelia]);
 
   const addMeme = useCallback(
     async (data: Uint8Array): Promise<CID | null> => {
-      if (!fs) {
+      if (fs == null) {
         return null;
       }
       const cid: CID = await fs.addBytes(data, {
@@ -87,9 +87,9 @@ export function HeliaProvider({ children }: ChildrenProp) {
   const retrieveMeme = useCallback(
     async (meme: Meme): Promise<HTMLImageElement | null> => {
       const cid = meme.hash;
-      const format = meme.format;
+      const { format } = meme;
       const parsedCID = CID.parse(cid);
-      if (!fs) {
+      if (fs == null) {
         return null;
       }
       let bytes: Uint8Array = new Uint8Array();

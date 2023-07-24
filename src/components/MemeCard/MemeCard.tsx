@@ -1,11 +1,12 @@
+import type React from "react";
 import type { Aspect } from "../../types/type";
 
 interface Props {
-  src: string;
-  aspect?: Aspect | undefined;
+  readonly src: string;
+  readonly aspect?: Aspect | undefined;
 }
 
-export function MemeCard({ src, aspect = "square" }: Props) {
+export function MemeCard({ src, aspect = "square" }: Props): React.ReactNode {
   return (
     <img
       alt="gallery"

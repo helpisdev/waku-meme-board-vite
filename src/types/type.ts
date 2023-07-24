@@ -4,15 +4,15 @@ export interface ChildrenProp {
   children: React.ReactNode;
 }
 
-export type Music = "song" | "album" | "playlist" | "radio_station";
-export type Video = "movie" | "episode" | "tv_show" | "other";
+export type Music = "album" | "playlist" | "radio_station" | "song";
+export type Video = "episode" | "movie" | "other" | "tv_show";
 export type OtherType = "article" | "book" | "profile" | "website";
 export type ObjectType = OtherType | `music.${Music}` | `video.${Video}`;
-export type CardType = "summary" | "summary_large_image" | "app" | "player";
+export type CardType = "app" | "player" | "summary_large_image" | "summary";
 
-export type Aspect = "video" | "square";
+export type Aspect = "square" | "video";
 
-export type Theme = "light" | "dark";
+export type Theme = "dark" | "light";
 export type ToggleThemeCallback = (theme?: Theme | undefined) => void;
 
-export type NodeStatus = "online" | "offline";
+export type NodeStatus = "offline" | "online";

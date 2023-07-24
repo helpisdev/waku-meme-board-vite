@@ -1,13 +1,16 @@
 import { useWaku } from "../../hooks/useWaku";
+import { isNullOrUndef } from "../../util";
 import { NetworkConnector } from "../NetworkConnector/NetworkConnector";
 import { Node } from "../Node/Node";
 
-export function Waku() {
+import type React from "react";
+
+export function Waku(): React.ReactNode {
   const waku = useWaku();
 
-  if (!waku || !waku.id) {
+  if (isNullOrUndef(waku) || isNullOrUndef(waku.id)) {
     return <NetworkConnector network="Waku" />;
   }
 
-  return <Node network="Waku" id={waku.id} status={waku.status} />;
+  return <Node id={waku.id} network="Waku" status={waku.status} />;
 }

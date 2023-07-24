@@ -12,7 +12,7 @@ export const enum MemeFormat {
 }
 
 export type AcceptedMemeFormatMime =
-  | "image/png"
-  | "image/jpg"
   | "image/gif"
-  | "image/jpeg";
+  | "image/jpeg"
+  | "image/jpg"
+  | "image/png";

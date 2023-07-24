@@ -3,7 +3,7 @@ import type { Decoder, Encoder } from "@waku/sdk";
 import type { Meme, MemeFormat } from "./meme";
 import type { NodeStatus } from "./type";
 
-type UploadMemeCallback = (hash: string, format: MemeFormat) => void;
+type UploadMemeCallback = (hash: string, format: MemeFormat) => Promise<void>;
 type RetrieveStoredMemesCallback = () => Promise<Meme[]>;
 type FilterMemesCallback = (
   callback?: ReceiveMemeCallback | undefined,

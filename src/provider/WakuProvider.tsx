@@ -5,6 +5,7 @@ import {
   createLightNode,
   waitForRemotePeer,
 } from "@waku/sdk";
+import type React from "react";
 import { createContext, useCallback, useEffect, useState } from "react";
 import { MemeMessage, contentTopic } from "../util";
 
@@ -32,7 +33,7 @@ export const WakuContext = createContext<WakuInterface>({
   filterMemes: null,
 });
 
-export function WakuProvider({ children }: ChildrenProp) {
+export function WakuProvider({ children }: ChildrenProp): React.ReactNode {
   const [waku, setWaku] = useState<LightNode | null>(null);
   const [encoder, setEncoder] = useState<Encoder | null>(null);
   const [decoder, setDecoder] = useState<Decoder | null>(null);
@@ -43,14 +44,14 @@ export function WakuProvider({ children }: ChildrenProp) {
 
   const uploadMeme = useCallback(
     async (hash: string, format: MemeFormat) => {
-      if (waku && encoder) {
+      if (waku != null && encoder != null) {
         const proto = MemeMessage.create({
           timestamp: Date.now(),
-          hash: hash,
+          hash,
           format: format.valueOf(),
         });
         const memeData = MemeMessage.encode(proto).finish();
-        await (waku as LightNode).lightPush.send(encoder, {
+        await waku.lightPush.send(encoder, {
           payload: memeData,
         });
       }
@@ -59,15 +60,15 @@ export function WakuProvider({ children }: ChildrenProp) {
   );
 
   const retrieveStoredMemes = useCallback(async (): Promise<Meme[]> => {
-    const results: Array<Meme> = [];
+    const results: Meme[] = [];
 
-    if (waku && decoder) {
+    if (waku != null && decoder != null) {
       const storeQuery = waku.store.queryGenerator([decoder], {});
 
       for await (const futureMemes of storeQuery) {
         const memes = await Promise.all(futureMemes);
         for (const meme of memes) {
-          if (meme) {
+          if (meme != null) {
             const { hash, timestamp, format }: Meme = MemeMessage.decode(
               meme.payload,
             ) as unknown as Meme;
@@ -82,7 +83,7 @@ export function WakuProvider({ children }: ChildrenProp) {
 
   const decodeMeme = useCallback(
     (encodedMeme?: IDecodedMessage | undefined): Meme | null => {
-      if (!encodedMeme?.payload) {
+      if (encodedMeme?.payload == null) {
         return null;
       }
       return MemeMessage.decode(encodedMeme.payload) as unknown as Meme;
@@ -94,12 +95,12 @@ export function WakuProvider({ children }: ChildrenProp) {
     async (
       callback?: ReceiveMemeCallback | undefined,
     ): Promise<Unsubscribe | undefined> => {
-      if (waku && decoder) {
+      if (waku != null && decoder != null) {
         return await waku.filter.subscribe(
           [decoder],
           (msg: IDecodedMessage) => {
             const meme = decodeMeme(msg);
-            if (meme && callback) {
+            if (meme != null && callback != null) {
               callback(meme);
             }
           },
@@ -112,20 +113,20 @@ export function WakuProvider({ children }: ChildrenProp) {
   );
 
   const startWaku = useCallback(async () => {
-    if (!waku) {
+    if (waku == null) {
       try {
         console.info("Starting Waku");
         const waku = await createLightNode({ defaultBootstrap: true });
         setWaku(waku);
 
-        const encoder = createEncoder({
-          contentTopic: contentTopic,
+        const enc = createEncoder({
+          contentTopic,
           ephemeral: false,
         });
-        setEncoder(encoder);
+        setEncoder(enc);
 
-        const decoder = createDecoder(contentTopic);
-        setDecoder(decoder);
+        const dec = createDecoder(contentTopic);
+        setDecoder(dec);
 
         setId(waku.libp2p.peerId.toString());
         await waku.start();
@@ -143,11 +144,13 @@ export function WakuProvider({ children }: ChildrenProp) {
         setError(true);
       }
     }
-  }, []);
+  }, [waku]);
 
   useEffect(() => {
-    startWaku();
-  }, []);
+    startWaku().catch((e) => {
+      console.error(e);
+    });
+  }, [startWaku]);
 
   return (
     <WakuContext.Provider

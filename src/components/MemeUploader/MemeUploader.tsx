@@ -1,24 +1,30 @@
 import * as Form from "@radix-ui/react-form";
 import { useHelia } from "../../hooks/useHelia";
 import { useWaku } from "../../hooks/useWaku";
-import { isAcceptedMemeFormatMime, mimeToFormatMapping } from "../../util";
+import {
+  isAcceptedMemeFormatMime,
+  isNullOrUndef,
+  mimeToFormatMapping,
+} from "../../util";
 
-export function MemeUploader() {
+import type React from "react";
+
+export function MemeUploader(): React.ReactNode {
   const { addMeme } = useHelia();
   const { uploadMeme } = useWaku();
 
   async function handleMemeSubmit(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) {
+    e: React.MouseEvent<HTMLButtonElement>,
+  ): Promise<void> {
     e.preventDefault();
     const meme: HTMLElement | null = document.getElementById("meme");
-    if (meme && uploadMeme) {
+    if (!isNullOrUndef(meme) && !isNullOrUndef(uploadMeme)) {
       const memes = (meme as HTMLInputElement).files;
-      if (memes) {
+      if (memes != null) {
         for (const m of memes) {
           const memeData = new Uint8Array(await m.arrayBuffer());
           const cid = await addMeme?.(memeData);
-          if (cid) {
+          if (!isNullOrUndef(cid)) {
             const mime = m.type;
             if (isAcceptedMemeFormatMime(mime)) {
               await uploadMeme(cid.toString(), mimeToFormatMapping[mime]);
@@ -36,15 +42,19 @@ export function MemeUploader() {
           <Form.Label className="mb-2 inline-block text-high-contrast dark:text-high-contrast-dark">
             Choose an image:
           </Form.Label>
+
           <Form.Message match="valueMissing">
             Please select an image
           </Form.Message>
+
           <Form.Message match="typeMismatch">
             Please select an image with a format of jpeg, jpg, png, or gif
           </Form.Message>
         </div>
+
         <Form.Control asChild>
           <input
+            accept=".jpg, .png, .jpeg, .gif"
             className="file:border-inherit
                       focus:border-primary
                       focus:shadow-te-primary
@@ -95,17 +105,15 @@ export function MemeUploader() {
                       hover:dark:file:bg-hovered-ui-el-dark
                       focus:dark:text-high-contrast-dark
 "
-            type="file"
-            accept=".jpg, .png, .jpeg, .gif"
             id="meme"
             required
+            type="file"
           />
         </Form.Control>
       </Form.Field>
+
       <Form.Submit asChild>
         <button
-          type="submit"
-          onClick={handleMemeSubmit}
           className="
         dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]]
         mt-2
@@ -141,8 +149,10 @@ export function MemeUploader() {
         dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
         dark:active:bg-hovered-solid-dark
         "
-          data-te-ripple-init
           data-te-ripple-color="light"
+          data-te-ripple-init
+          onClick={handleMemeSubmit}
+          type="submit"
         >
           Post a Meme!
         </button>

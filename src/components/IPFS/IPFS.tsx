@@ -1,13 +1,15 @@
+import type React from "react";
 import { useHelia } from "../../hooks/useHelia";
+import { isNullOrUndef } from "../../util";
 import { NetworkConnector } from "../NetworkConnector/NetworkConnector";
 import { Node } from "../Node/Node";
 
-export function IPFS() {
+export function IPFS(): React.ReactNode {
   const helia = useHelia();
 
-  if (!helia || !helia.id) {
+  if (isNullOrUndef(helia?.id)) {
     return <NetworkConnector network="IPFS" />;
   }
 
-  return <Node network="IPFS" id={helia.id} status={helia.status} />;
+  return <Node id={helia.id} network="IPFS" status={helia.status} />;
 }

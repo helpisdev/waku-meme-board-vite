@@ -26,7 +26,7 @@ export const conf = {
 };
 
 export function isAcceptedMemeFormatMime(
-  mime: any,
+  mime: unknown,
 ): mime is AcceptedMemeFormatMime {
   return (mime as AcceptedMemeFormatMime) !== undefined;
 }
@@ -52,3 +52,12 @@ export const MemeMessage = new Type("Meme")
   .add(new Field("format", 3, "enum"));
 
 export const contentTopic = "/waku-meme-board/1/meme/proto";
+
+// For explicit checking
+export function isNullOrUndef(datum: unknown): datum is undefined | null {
+  return datum !== null && datum !== undefined;
+}
+
+export function isPromise<T>(val: unknown): val is Promise<T> {
+  return val instanceof Promise;
+}
