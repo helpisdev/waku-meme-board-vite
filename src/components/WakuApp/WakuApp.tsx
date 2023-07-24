@@ -1,13 +1,13 @@
 import { DecentralizedNet } from "../DecentralizedNet/DecentralizedNet";
 import { IPFS } from "../IPFS/IPFS";
-import { Waku } from "../Waku/Waku";
 import { MemeGallery } from "../MemeGallery/MemeGallery";
+import { Waku } from "../Waku/Waku";
 
 export function WakuApp() {
   return (
     <>
       <DecentralizedNet>
-        <div className="columns-2 mb-20">
+        <div className="mb-20 columns-2">
           <div className="mx-auto">
             <IPFS />
           </div>

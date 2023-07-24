@@ -1,23 +1,23 @@
-import { useEffect, useState, useCallback, createContext } from "react";
-import { MemeMessage, contentTopic } from "../util";
+import { Protocols } from "@waku/interfaces";
 import {
-  createLightNode,
-  createEncoder,
   createDecoder,
+  createEncoder,
+  createLightNode,
   waitForRemotePeer,
 } from "@waku/sdk";
-import { Protocols } from "@waku/interfaces";
+import { createContext, useCallback, useEffect, useState } from "react";
+import { MemeMessage, contentTopic } from "../util";
 
 import type {
+  IDecodedMessage,
   LightNode,
   Unsubscribe,
-  IDecodedMessage,
   Waku,
 } from "@waku/interfaces";
-import type { Encoder, Decoder } from "@waku/sdk";
+import type { Decoder, Encoder } from "@waku/sdk";
+import type { Meme, MemeFormat } from "../types/meme";
 import type { ChildrenProp, NodeStatus } from "../types/type";
 import type { ReceiveMemeCallback, WakuInterface } from "../types/waku";
-import type { Meme, MemeFormat } from "../types/meme";
 
 export const WakuContext = createContext<WakuInterface>({
   waku: null,
@@ -55,7 +55,7 @@ export function WakuProvider({ children }: ChildrenProp) {
         });
       }
     },
-    [waku, encoder]
+    [waku, encoder],
   );
 
   const retrieveStoredMemes = useCallback(async (): Promise<Meme[]> => {
@@ -69,7 +69,7 @@ export function WakuProvider({ children }: ChildrenProp) {
         for (const meme of memes) {
           if (meme) {
             const { hash, timestamp, format }: Meme = MemeMessage.decode(
-              meme.payload
+              meme.payload,
             ) as unknown as Meme;
             results.push({ hash, timestamp, format });
           }
@@ -87,12 +87,12 @@ export function WakuProvider({ children }: ChildrenProp) {
       }
       return MemeMessage.decode(encodedMeme.payload) as unknown as Meme;
     },
-    []
+    [],
   );
 
   const filterMemes = useCallback(
     async (
-      callback?: ReceiveMemeCallback | undefined
+      callback?: ReceiveMemeCallback | undefined,
     ): Promise<Unsubscribe | undefined> => {
       if (waku && decoder) {
         return await waku.filter.subscribe(
@@ -102,13 +102,13 @@ export function WakuProvider({ children }: ChildrenProp) {
             if (meme && callback) {
               callback(meme);
             }
-          }
+          },
         );
       }
 
       return undefined;
     },
-    [waku, decoder, decodeMeme]
+    [waku, decoder, decodeMeme],
   );
 
   const startWaku = useCallback(async () => {

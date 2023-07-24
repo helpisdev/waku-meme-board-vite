@@ -1,7 +1,7 @@
-import type { UnixFS } from "@helia/unixfs";
 import type { Helia } from "@helia/interface";
+import type { UnixFS } from "@helia/unixfs";
 import type { CID } from "multiformats";
-import type { Meme } from './meme';
+import type { Meme } from "./meme";
 import type { NodeStatus } from "./type";
 
 type AddMemeCallback = (data: Uint8Array) => Promise<CID | null>;

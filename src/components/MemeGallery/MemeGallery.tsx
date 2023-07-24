@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { MemeCard } from "../MemeCard/MemeCard";
+import { useEffect, useState } from "react";
 import { useHelia } from "../../hooks/useHelia";
 import { useWaku } from "../../hooks/useWaku";
+import { MemeCard } from "../MemeCard/MemeCard";
 
 import type { Unsubscribe } from "@waku/interfaces";
 
@@ -48,7 +48,7 @@ export function MemeGallery() {
   }
 
   return (
-    <div className="columns-1 gap-[1.5em] sm:columns-2 md:columns-3 mx-4">
+    <div className="mx-4 columns-1 gap-[1.5em] sm:columns-2 md:columns-3">
       {memes.map((meme, i) => {
         const aspect = i % 3 == 0 || i % 4 == 0 ? "video" : "square";
         return <MemeCard src={meme} aspect={aspect} />;

@@ -1,5 +1,5 @@
-import { MemeUploader } from "../MemeUploader/MemeUploader";
 import type { ChildrenProp } from "../../types/type";
+import { MemeUploader } from "../MemeUploader/MemeUploader";
 
 export function DecentralizedNet({ children }: ChildrenProp) {
   return (

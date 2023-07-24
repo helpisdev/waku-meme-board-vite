@@ -1,6 +1,6 @@
+import { useHelia } from "../../hooks/useHelia";
 import { NetworkConnector } from "../NetworkConnector/NetworkConnector";
 import { Node } from "../Node/Node";
-import { useHelia } from "../../hooks/useHelia";
 
 export function IPFS() {
   const helia = useHelia();

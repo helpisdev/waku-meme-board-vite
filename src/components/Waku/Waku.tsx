@@ -1,6 +1,6 @@
+import { useWaku } from "../../hooks/useWaku";
 import { NetworkConnector } from "../NetworkConnector/NetworkConnector";
 import { Node } from "../Node/Node";
-import { useWaku } from "../../hooks/useWaku";
 
 export function Waku() {
   const waku = useWaku();

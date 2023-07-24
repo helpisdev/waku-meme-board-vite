@@ -1,16 +1,16 @@
 import { UnixFS, unixfs } from "@helia/unixfs";
 import { defaultLibp2p } from "@waku/sdk";
-import { createHelia } from "helia";
-import { CID } from "multiformats";
 import { IDBBlockstore } from "blockstore-idb";
 import { IDBDatastore } from "datastore-idb";
-import { useEffect, useState, useCallback, createContext } from "react";
+import { createHelia } from "helia";
+import { CID } from "multiformats";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { formatToMimeMapping } from "../util";
 
 import type { Helia } from "@helia/interface";
-import type { ChildrenProp, NodeStatus } from "../types/type";
 import type { HeliaInterface } from "../types/helia";
 import type { Meme } from "../types/meme";
+import type { ChildrenProp, NodeStatus } from "../types/type";
 
 export const HeliaContext = createContext<HeliaInterface>({
   helia: null,
@@ -81,7 +81,7 @@ export function HeliaProvider({ children }: ChildrenProp) {
 
       return cid;
     },
-    [fs]
+    [fs],
   );
 
   const retrieveMeme = useCallback(
@@ -105,7 +105,7 @@ export function HeliaProvider({ children }: ChildrenProp) {
 
       return image;
     },
-    [fs]
+    [fs],
   );
 
   return (

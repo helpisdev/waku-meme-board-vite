@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import { HeliaProvider } from "./provider/HeliaProvider";
-import { WakuProvider } from "./provider/WakuProvider";
 import { ThemeProvider } from "./provider/ThemeProvider";
+import { WakuProvider } from "./provider/WakuProvider";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,5 +15,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </WakuProvider>
       </HeliaProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

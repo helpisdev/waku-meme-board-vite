@@ -1,7 +1,7 @@
 export interface Meme {
-  timestamp: Date,
-  hash: string,
-  format: MemeFormat,
+  timestamp: Date;
+  hash: string;
+  format: MemeFormat;
 }
 
 export const enum MemeFormat {
@@ -11,4 +11,8 @@ export const enum MemeFormat {
   GIF = 3,
 }
 
-export type AcceptedMemeFormatMime = "image/png" | "image/jpg" | "image/gif" | "image/jpeg";
+export type AcceptedMemeFormatMime =
+  | "image/png"
+  | "image/jpg"
+  | "image/gif"
+  | "image/jpeg";

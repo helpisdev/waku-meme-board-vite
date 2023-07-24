@@ -1,14 +1,14 @@
 import * as Form from "@radix-ui/react-form";
-import { isAcceptedMemeFormatMime, mimeToFormatMapping } from "../../util";
 import { useHelia } from "../../hooks/useHelia";
 import { useWaku } from "../../hooks/useWaku";
+import { isAcceptedMemeFormatMime, mimeToFormatMapping } from "../../util";
 
 export function MemeUploader() {
   const { addMeme } = useHelia();
   const { uploadMeme } = useWaku();
 
   async function handleMemeSubmit(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
     e.preventDefault();
     const meme: HTMLElement | null = document.getElementById("meme");
@@ -30,7 +30,7 @@ export function MemeUploader() {
   }
 
   return (
-    <Form.Root className="mx-auto block max-w-sm border-2 border-subtle-borders-and-seperators dark:border-subtle-borders-and-seperators-dark rounded-lg bg-app dark:bg-app-dark p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
+    <Form.Root className="mx-auto block max-w-sm rounded-lg border-2 border-subtle-borders-and-seperators bg-app p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:border-subtle-borders-and-seperators-dark dark:bg-app-dark">
       <Form.Field className="" name="meme">
         <div className="mb-3">
           <Form.Label className="mb-2 inline-block text-high-contrast dark:text-high-contrast-dark">
@@ -45,7 +45,11 @@ export function MemeUploader() {
         </div>
         <Form.Control asChild>
           <input
-            className="relative
+            className="file:border-inherit
+                      focus:border-primary
+                      focus:shadow-te-primary
+                      dark:focus:border-primary
+                      relative
                       m-0
                       block
                       w-full
@@ -54,11 +58,13 @@ export function MemeUploader() {
                       rounded
                       border
                       border-solid
+                      border-ui-el-borders-and-focus-rings
                       bg-clip-padding
                       px-3
                       py-[0.32rem]
                       text-base
                       font-normal
+                      text-high-contrast
                       transition
                       duration-300
                       ease-in-out
@@ -68,32 +74,26 @@ export function MemeUploader() {
                       file:rounded-none
                       file:border-0
                       file:border-solid
-                      file:border-inherit
+                      file:bg-ui-el
                       file:px-3
                       file:py-[0.32rem]
+                      file:text-high-contrast
                       file:transition
                       file:duration-150
+
                       file:ease-in-out
                       file:[border-inline-end-width:1px]
                       file:[margin-inline-end:0.75rem]
-                      focus:border-primary
-                      focus:shadow-te-primary
-                      focus:outline-none
-                      dark:focus:border-primary
-
-                      text-high-contrast
-                      focus:text-high-contrast
-                      file:text-high-contrast
-                      file:bg-ui-el
                       hover:file:bg-hovered-ui-el
-                      border-ui-el-borders-and-focus-rings
+                      focus:text-high-contrast
+                      focus:outline-none
 
                       dark:border-ui-el-borders-and-focus-rings-dark
                       dark:text-high-contrast-dark
-                      focus:dark:text-high-contrast-dark
-                      dark:file:text-high-contrast-dark
                       dark:file:bg-ui-el-dark
+                      dark:file:text-high-contrast-dark
                       hover:dark:file:bg-hovered-ui-el-dark
+                      focus:dark:text-high-contrast-dark
 "
             type="file"
             accept=".jpg, .png, .jpeg, .gif"
@@ -107,13 +107,12 @@ export function MemeUploader() {
           type="submit"
           onClick={handleMemeSubmit}
           className="
-        mt-2
         dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]]
+        mt-2
         inline-block
         w-full
         rounded
         bg-solid
-        dark:bg-solid-dark
         px-6
         pb-2
         pt-2.5
@@ -121,25 +120,26 @@ export function MemeUploader() {
         font-medium
         leading-normal
         text-high-contrast
-        dark:text-high-contrast-dark
         shadow-[0_4px_9px_-4px_#3b71ca]
         transition
         duration-150
         ease-in-out
         hover:bg-hovered-solid
-        dark:hover:bg-hovered-solid-dark
         hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
         focus:bg-hovered-solid
-        dark:focus:bg-hovered-solid-dark
         focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
         focus:outline-none
         focus:ring-0
         active:bg-hovered-solid
-        dark:active:bg-hovered-solid-dark
         active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]
+        dark:bg-solid-dark
+        dark:text-high-contrast-dark
         dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)]
+        dark:hover:bg-hovered-solid-dark
         dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
+        dark:focus:bg-hovered-solid-dark
         dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
+        dark:active:bg-hovered-solid-dark
         "
           data-te-ripple-init
           data-te-ripple-color="light"

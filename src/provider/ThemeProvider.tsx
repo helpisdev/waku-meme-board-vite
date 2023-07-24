@@ -14,13 +14,13 @@ export function ThemeProvider({ children }: ChildrenProp) {
 
   useEffect(() => {
     const darkModePreference = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: dark)",
     );
     const preferredTheme = darkModePreference.matches ? "dark" : "light";
     toggleTheme(preferredTheme);
 
     darkModePreference.addEventListener("change", (e) =>
-      toggleTheme(e.matches ? "dark" : "light")
+      toggleTheme(e.matches ? "dark" : "light"),
     );
   }, []);
 
@@ -42,7 +42,7 @@ export function ThemeProvider({ children }: ChildrenProp) {
         }
       }
     },
-    [currentTheme]
+    [currentTheme],
   );
 
   return (

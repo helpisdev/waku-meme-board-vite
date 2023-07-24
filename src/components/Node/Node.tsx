@@ -12,10 +12,10 @@ export function Node({ id, status, network }: Props) {
       <h3 className="mb-4 text-lg font-bold text-high-contrast dark:text-high-contrast-dark">
         {network}
       </h3>
-      <h4 className="mb-4 text-md font-bold text-high-contrast dark:text-high-contrast-dark">
+      <h4 className="text-md mb-4 font-bold text-high-contrast dark:text-high-contrast-dark">
         ID: {id}
       </h4>
-      <h4 className="mb-4 text-md font-bold text-high-contrast dark:text-high-contrast-dark">
+      <h4 className="text-md mb-4 font-bold text-high-contrast dark:text-high-contrast-dark">
         Status: {status}
       </h4>
     </div>

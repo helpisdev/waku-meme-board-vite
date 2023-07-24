@@ -1,7 +1,7 @@
-import type { CardType, ObjectType } from "./types/type";
+import { Field, Type } from "protobufjs";
 import type { AcceptedMemeFormatMime } from "./types/meme";
 import { MemeFormat } from "./types/meme";
-import { Type, Field } from "protobufjs";
+import type { CardType, ObjectType } from "./types/type";
 
 export const conf = {
   baseURL: "https://waku-meme-board.helpis.dev/",
@@ -25,7 +25,9 @@ export const conf = {
   },
 };
 
-export function isAcceptedMemeFormatMime(mime: any): mime is AcceptedMemeFormatMime {
+export function isAcceptedMemeFormatMime(
+  mime: any,
+): mime is AcceptedMemeFormatMime {
   return (mime as AcceptedMemeFormatMime) !== undefined;
 }
 
@@ -35,14 +37,14 @@ export const mimeToFormatMapping: Record<AcceptedMemeFormatMime, MemeFormat> = {
   "image/jpg": MemeFormat.JPG,
   "image/gif": MemeFormat.GIF,
   "image/jpeg": MemeFormat.JPEG,
-}
+};
 
 export const formatToMimeMapping: Record<MemeFormat, AcceptedMemeFormatMime> = {
   [MemeFormat.PNG]: "image/png",
   [MemeFormat.JPG]: "image/jpg",
   [MemeFormat.GIF]: "image/gif",
   [MemeFormat.JPEG]: "image/jpeg",
-}
+};
 
 export const MemeMessage = new Type("Meme")
   .add(new Field("timestamp", 1, "uint64"))
