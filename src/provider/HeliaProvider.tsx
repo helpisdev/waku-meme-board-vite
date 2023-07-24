@@ -66,39 +66,45 @@ export function HeliaProvider({ children }: ChildrenProp) {
     startHelia();
   }, []);
 
-  async function addMeme(data: Uint8Array): Promise<CID | null> {
-    if (!fs) {
-      return null;
-    }
-    const cid: CID = await fs.addBytes(data, {
-      onProgress: (evt) => {
-        console.info("add event", evt.type, evt.detail);
-      },
-    });
+  const addMeme = useCallback(
+    async (data: Uint8Array): Promise<CID | null> => {
+      if (!fs) {
+        return null;
+      }
+      const cid: CID = await fs.addBytes(data, {
+        onProgress: (evt) => {
+          console.info("add event", evt.type, evt.detail);
+        },
+      });
 
-    return cid;
-  }
+      return cid;
+    },
+    [fs]
+  );
 
-  async function retrieveMeme(meme: Meme): Promise<HTMLImageElement | null> {
-    const cid = meme.hash;
-    const format = meme.format;
-    const parsedCID = CID.parse(cid);
-    if (!fs) {
-      return null;
-    }
-    let bytes: Uint8Array = new Uint8Array();
-    for await (const chunk of fs.cat(parsedCID)) {
-      bytes = new Uint8Array([...bytes, ...chunk]);
-    }
-    const mime = formatToMimeMapping[format];
-    const blob = new Blob([bytes], { type: mime });
+  const retrieveMeme = useCallback(
+    async (meme: Meme): Promise<HTMLImageElement | null> => {
+      const cid = meme.hash;
+      const format = meme.format;
+      const parsedCID = CID.parse(cid);
+      if (!fs) {
+        return null;
+      }
+      let bytes: Uint8Array = new Uint8Array();
+      for await (const chunk of fs.cat(parsedCID)) {
+        bytes = new Uint8Array([...bytes, ...chunk]);
+      }
+      const mime = formatToMimeMapping[format];
+      const blob = new Blob([bytes], { type: mime });
 
-    const imageUrl = URL.createObjectURL(blob);
-    const image = new Image();
-    image.src = imageUrl;
+      const imageUrl = URL.createObjectURL(blob);
+      const image = new Image();
+      image.src = imageUrl;
 
-    return image;
-  }
+      return image;
+    },
+    [fs]
+  );
 
   return (
     <HeliaContext.Provider

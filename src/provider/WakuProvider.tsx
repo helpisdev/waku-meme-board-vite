@@ -46,21 +46,24 @@ export function WakuProvider({ children }: ChildrenProp) {
   const [id, setId] = useState<string | null>(null);
   const [status, setStatus] = useState<NodeStatus>("offline");
 
-  async function uploadMeme(hash: string, format: MemeFormat) {
-    if (waku && encoder) {
-      const proto = MemeMessage.create({
-        timestamp: Date.now(),
-        hash: hash,
-        format: format.valueOf(),
-      });
-      const memeData = MemeMessage.encode(proto).finish();
-      await (waku as LightNode).lightPush.send(encoder, {
-        payload: memeData,
-      });
-    }
-  }
+  const uploadMeme = useCallback(
+    async (hash: string, format: MemeFormat) => {
+      if (waku && encoder) {
+        const proto = MemeMessage.create({
+          timestamp: Date.now(),
+          hash: hash,
+          format: format.valueOf(),
+        });
+        const memeData = MemeMessage.encode(proto).finish();
+        await (waku as LightNode).lightPush.send(encoder, {
+          payload: memeData,
+        });
+      }
+    },
+    [waku, encoder]
+  );
 
-  async function retrieveStoredMemes(): Promise<Meme[]> {
+  const retrieveStoredMemes = useCallback(async (): Promise<Meme[]> => {
     const results: Array<Meme> = [];
 
     if (waku && decoder) {
@@ -80,29 +83,38 @@ export function WakuProvider({ children }: ChildrenProp) {
     }
 
     return results;
-  }
+  }, [waku, decoder]);
 
-  function decodeMeme(encodedMeme?: IDecodedMessage | undefined): Meme | null {
-    if (!encodedMeme?.payload) {
-      return null;
-    }
-    return MemeMessage.decode(encodedMeme.payload) as unknown as Meme;
-  }
+  const decodeMeme = useCallback(
+    (encodedMeme?: IDecodedMessage | undefined): Meme | null => {
+      if (!encodedMeme?.payload) {
+        return null;
+      }
+      return MemeMessage.decode(encodedMeme.payload) as unknown as Meme;
+    },
+    []
+  );
 
-  async function filterMemes(
-    callback?: ReceiveMemeCallback | undefined
-  ): Promise<Unsubscribe | undefined> {
-    if (waku && decoder) {
-      return await waku.filter.subscribe([decoder], (msg: IDecodedMessage) => {
-        const meme = decodeMeme(msg);
-        if (meme && callback) {
-          callback(meme);
-        }
-      });
-    }
+  const filterMemes = useCallback(
+    async (
+      callback?: ReceiveMemeCallback | undefined
+    ): Promise<Unsubscribe | undefined> => {
+      if (waku && decoder) {
+        return await waku.filter.subscribe(
+          [decoder],
+          (msg: IDecodedMessage) => {
+            const meme = decodeMeme(msg);
+            if (meme && callback) {
+              callback(meme);
+            }
+          }
+        );
+      }
 
-    return undefined;
-  }
+      return undefined;
+    },
+    [waku, decoder, decodeMeme]
+  );
 
   const startWaku = useCallback(async () => {
     if (!waku) {

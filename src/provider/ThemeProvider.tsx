@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import type { ChildrenProp, Theme, ToggleThemeCallback } from "../type";
 
 export const ThemeContext = createContext<{
@@ -24,23 +24,26 @@ export function ThemeProvider({ children }: ChildrenProp) {
     );
   }, []);
 
-  function toggleTheme(theme?: Theme | undefined) {
-    const root = document.getElementById("html");
-    if (!theme) {
-      theme = currentTheme == "light" ? "dark" : "light";
-    }
-    setTheme(theme);
-    if (root) {
-      const hasTheme = root.classList.contains(theme);
-      if (theme == "light") {
-        root.classList.remove("dark");
-      } else {
-        if (!hasTheme) {
-          root.classList.add("dark");
+  const toggleTheme = useCallback(
+    (theme?: Theme | undefined) => {
+      const root = document.getElementById("html");
+      if (!theme) {
+        theme = currentTheme == "light" ? "dark" : "light";
+      }
+      setTheme(theme);
+      if (root) {
+        const hasTheme = root.classList.contains(theme);
+        if (theme == "light") {
+          root.classList.remove("dark");
+        } else {
+          if (!hasTheme) {
+            root.classList.add("dark");
+          }
         }
       }
-    }
-  }
+    },
+    [currentTheme]
+  );
 
   return (
     <ThemeContext.Provider
