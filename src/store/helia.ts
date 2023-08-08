@@ -24,7 +24,7 @@ export const heliaStore = map<HeliaInterface>({
 const datastore = new IDBDatastore("waku-meme-board", {});
 const blockstore = new IDBBlockstore("waku-meme-board", {});
 
-export async function libp2pOptions() {
+async function createLibp2pOptions() {
   await datastore.open();
   await blockstore.open();
 
@@ -33,6 +33,8 @@ export async function libp2pOptions() {
     datastore,
   };
 }
+
+export const libp2pOptions = createLibp2pOptions();
 
 export async function closeIDBStores() {
   await datastore.close();
@@ -49,10 +51,7 @@ export async function startHelia(): Promise<void> {
       heliaStore.setKey("starting", true);
       console.info("Starting Helia");
 
-      await datastore.open();
-      await blockstore.open();
-
-      const libp2p = await defaultLibp2p(undefined, await libp2pOptions());
+      const libp2p = await defaultLibp2p(undefined, await libp2pOptions);
       const helia = await createHelia({ datastore, blockstore, libp2p });
 
       heliaStore.setKey("helia", helia);

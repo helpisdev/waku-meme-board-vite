@@ -191,7 +191,7 @@ export async function startWaku(): Promise<void> {
       const waku = await createLightNode({
         defaultBootstrap: true,
         pubSubTopic: contentTopic,
-        libp2p: await libp2pOptions(),
+        libp2p: await libp2pOptions,
       });
       wakuStore.setKey("waku", waku);
 
@@ -222,30 +222,3 @@ export async function startWaku(): Promise<void> {
     }
   }
 }
-
-/*
-import {
-  defaultLibp2p,
-  defaultPeerDiscovery,
-  WakuNode,
-  waitForRemotePeer,
-  createDecoder,
-  waku
-} from "https://unpkg.com/@waku/sdk@0.0.18/bundle/index.js";
-
-const libp2p = await defaultLibp2p(undefined, {
-  peerDiscovery: [defaultPeerDiscovery()],
-});
-const store = waku.wakuStore();
-const node = new WakuNode({}, libp2p, store);
-
-await node.start();
-
-await waitForRemotePeer(node, ["store"]);
-
-await node.store.queryOrderedCallback(
-  [createDecoder("/relay-ping/1/ping/null")],
-  callback,
-  { pageDirection: "backward" }
-);
-*/
