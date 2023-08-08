@@ -31,7 +31,7 @@ export const conf = {
 export function isAcceptedMemeFormatMime(
   mime: unknown,
 ): mime is AcceptedMemeFormatMime {
-  return (mime as AcceptedMemeFormatMime) !== undefined && mime !== null;
+  return !!(mime as AcceptedMemeFormatMime);
 }
 
 // No builtin way to iterate enum values in TypeScript unfortunately
@@ -61,7 +61,7 @@ export function isPromise<T>(val: unknown): val is Promise<T> {
 }
 
 export function isFunction<T>(fn: T | unknown): fn is T {
-  return fn !== undefined && fn !== null && typeof fn === "function";
+  return typeof fn === "function";
 }
 
 export function isUnsubscribeCallback(cb: unknown): cb is Unsubscribe {

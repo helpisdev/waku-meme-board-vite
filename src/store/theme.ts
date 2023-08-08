@@ -8,13 +8,13 @@ export function toggleTheme(theme?: Theme | undefined): void {
   const currentTheme = themeStore.get();
   const root = document.getElementById("html");
 
-  if (theme === undefined || theme === null) {
+  if (!theme) {
     theme = currentTheme === "light" ? "dark" : "light";
   }
 
   themeStore.set(theme);
 
-  if (root !== undefined && root !== null) {
+  if (root) {
     const hasTheme = root.classList.contains(theme);
 
     if (theme === "light") {

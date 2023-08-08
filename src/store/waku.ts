@@ -41,12 +41,7 @@ export async function uploadMeme(
   const waku = store.waku;
   const encoder = store.encoder;
 
-  if (
-    waku !== undefined &&
-    waku !== null &&
-    encoder !== undefined &&
-    encoder !== null
-  ) {
+  if (waku && encoder) {
     const proto = MemeMessage.create({
       timestamp: new Date(Date.now()),
       hash,
@@ -68,14 +63,7 @@ export async function retrieveStoredMemes(): Promise<Meme[]> {
 
   const results: Meme[] = [];
 
-  if (
-    waku !== undefined &&
-    waku !== null &&
-    waku.store !== undefined &&
-    waku.store !== null &&
-    decoder !== undefined &&
-    decoder !== null
-  ) {
+  if (waku?.store && decoder) {
     const storeQuery = waku.store.queryGenerator([decoder], {
       pageDirection: PageDirection.BACKWARD,
     });
@@ -84,7 +72,7 @@ export async function retrieveStoredMemes(): Promise<Meme[]> {
       const memes = await Promise.all(futureMemes);
 
       for (const meme of memes) {
-        if (meme !== undefined && meme !== null) {
+        if (meme) {
           const { hash, timestamp, format }: Meme = MemeMessage.decode(
             meme.payload,
           ) as unknown as Meme;
@@ -101,12 +89,7 @@ export async function retrieveStoredMemes(): Promise<Meme[]> {
 export function decodeMeme(
   encodedMeme?: IDecodedMessage | undefined,
 ): Meme | null {
-  if (
-    encodedMeme === undefined ||
-    encodedMeme === null ||
-    encodedMeme?.payload === undefined ||
-    encodedMeme?.payload === null
-  ) {
+  if (!encodedMeme?.payload) {
     return null;
   }
 
@@ -120,20 +103,11 @@ export async function filterMemes(
   const waku = store.waku;
   const decoder = store.decoder;
 
-  if (
-    waku !== undefined &&
-    waku !== null &&
-    decoder !== undefined &&
-    decoder !== null
-  ) {
+  if (waku && decoder) {
     return await waku.filter.subscribe([decoder], (msg: IDecodedMessage) => {
       const meme = decodeMeme(msg);
 
-      if (
-        meme !== null &&
-        meme !== undefined &&
-        isRetrieveMemeCallback(callback)
-      ) {
+      if (meme && isRetrieveMemeCallback(callback)) {
         callback(meme);
       }
     });
@@ -150,15 +124,15 @@ export async function handleMemeSubmit(
   const meme: HTMLElement | null = document.getElementById("uploader");
 
   try {
-    if (meme !== undefined && meme !== null) {
+    if (meme) {
       const memes = (meme as HTMLInputElement).files;
 
-      if (memes !== undefined && memes !== null) {
+      if (memes) {
         for (const m of memes) {
           const memeData = new Uint8Array(await m.arrayBuffer());
           const cid = await addMeme(memeData);
 
-          if (cid !== undefined && cid !== null) {
+          if (cid) {
             const mime = m.type;
             if (isAcceptedMemeFormatMime(mime)) {
               await uploadMeme(cid.toString(), mimeToFormatMapping[mime]);
@@ -183,7 +157,7 @@ export async function startWaku(): Promise<void> {
   const waku = store.waku;
   const starting = store.starting;
 
-  if ((waku === null || waku === undefined) && !starting) {
+  if (!waku && !starting) {
     try {
       wakuStore.setKey("starting", true);
       console.info("Starting Waku");

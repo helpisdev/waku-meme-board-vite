@@ -15,13 +15,13 @@ export function MemeGallery(): React.ReactNode {
   useEffect(() => {
     retrieveStoredMemes()
       .then(async (m) => {
-        if (m !== null && m !== undefined) {
+        if (m) {
           const sources = [];
 
           for (const meme of m) {
             const src = await retrieveMeme(meme);
 
-            if (src !== undefined && src !== null) {
+            if (src) {
               sources.push(src.src);
             }
           }
@@ -34,7 +34,7 @@ export function MemeGallery(): React.ReactNode {
           await filterMemes(async (meme) => {
             const src = await retrieveMeme(meme);
 
-            if (src !== undefined && src !== null) {
+            if (src) {
               setMemes([...memes, src.src]);
             }
           }),

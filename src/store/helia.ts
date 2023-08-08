@@ -46,7 +46,7 @@ export async function startHelia(): Promise<void> {
   const helia = store.helia;
   const starting = store.starting;
 
-  if ((helia === null || helia === undefined) && !starting) {
+  if (!helia && !starting) {
     try {
       heliaStore.setKey("starting", true);
       console.info("Starting Helia");
@@ -73,7 +73,7 @@ export async function addMeme(data: Uint8Array): Promise<CID | null> {
   const store = heliaStore.get();
   const fs = store.fs;
 
-  if (fs === null || fs === undefined) {
+  if (!fs) {
     return null;
   }
 
@@ -95,7 +95,7 @@ export async function retrieveMeme(
   const { format } = meme;
   const parsedCID = CID.parse(cid);
 
-  if (fs === null || fs === undefined) {
+  if (!fs) {
     return null;
   }
 
