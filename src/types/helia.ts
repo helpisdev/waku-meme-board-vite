@@ -4,8 +4,10 @@ import type { CID } from "multiformats";
 import type { Meme } from "./meme";
 import type { NodeStatus } from "./type";
 
-type AddMemeCallback = (data: Uint8Array) => Promise<CID | null>;
-type RetrieveMemeCallback = (meme: Meme) => Promise<HTMLImageElement | null>;
+export type AddMemeCallback = (data: Uint8Array) => Promise<CID | null>;
+export type RetrieveMemeCallback = (
+  meme: Meme,
+) => Promise<HTMLImageElement | null>;
 
 export interface HeliaInterface {
   helia?: Helia | null;

@@ -4,14 +4,14 @@ module.exports = {
   darkMode: "class",
   theme: {
     colors: {
-      transparent: "transparent",
-      current: "currentColor",
-      app: {
+      "transparent": "transparent",
+      "current": "currentColor",
+      "app": {
         light: "#fdfdfc",
         DEFAULT: "#fdfdfc",
         dark: "#161615",
       },
-      subtle: {
+      "subtle": {
         light: "#fcf9f6",
         DEFAULT: "#fcf9f6",
         dark: "#221813",
@@ -46,7 +46,7 @@ module.exports = {
         DEFAULT: "#3db9cf",
         dark: "#00647d",
       },
-      solid: {
+      "solid": {
         light: "#e54d2e",
         DEFAULT: "#e54d2e",
         dark: "#e54d2e",

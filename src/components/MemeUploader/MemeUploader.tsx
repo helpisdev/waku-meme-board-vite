@@ -1,39 +1,18 @@
 import * as Form from "@radix-ui/react-form";
-import { useHelia } from "../../hooks/useHelia";
-import { useWaku } from "../../hooks/useWaku";
-import {
-  isAcceptedMemeFormatMime,
-  isNullOrUndef,
-  mimeToFormatMapping,
-} from "../../util";
+import { useCallback } from "react";
+import { handleMemeSubmit } from "../../store/waku";
 
 import type React from "react";
 
 export function MemeUploader(): React.ReactNode {
-  const { addMeme } = useHelia();
-  const { uploadMeme } = useWaku();
 
-  async function handleMemeSubmit(
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<void> {
-    e.preventDefault();
-    const meme: HTMLElement | null = document.getElementById("meme");
-    if (!isNullOrUndef(meme) && !isNullOrUndef(uploadMeme)) {
-      const memes = (meme as HTMLInputElement).files;
-      if (memes != null) {
-        for (const m of memes) {
-          const memeData = new Uint8Array(await m.arrayBuffer());
-          const cid = await addMeme?.(memeData);
-          if (!isNullOrUndef(cid)) {
-            const mime = m.type;
-            if (isAcceptedMemeFormatMime(mime)) {
-              await uploadMeme(cid.toString(), mimeToFormatMapping[mime]);
-            }
-          }
-        }
-      }
-    }
-  }
+  const handler = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      handleMemeSubmit(e)
+        .catch((e) => console.error(e));
+    },
+    [],
+  );
 
   return (
     <Form.Root className="mx-auto block max-w-sm rounded-lg border-2 border-subtle-borders-and-seperators bg-app p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:border-subtle-borders-and-seperators-dark dark:bg-app-dark">
@@ -105,7 +84,7 @@ export function MemeUploader(): React.ReactNode {
                       hover:dark:file:bg-hovered-ui-el-dark
                       focus:dark:text-high-contrast-dark
 "
-            id="meme"
+            id="uploader"
             required
             type="file"
           />
@@ -116,14 +95,12 @@ export function MemeUploader(): React.ReactNode {
         <button
           className="
         dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]]
-        mt-2
+        mt-2.5
         inline-block
         w-full
         rounded
         bg-solid
-        px-6
-        pb-2
-        pt-2.5
+        py-2
         text-lg
         font-medium
         leading-normal
@@ -151,7 +128,7 @@ export function MemeUploader(): React.ReactNode {
         "
           data-te-ripple-color="light"
           data-te-ripple-init
-          onClick={handleMemeSubmit}
+          onClick={handler}
           type="submit"
         >
           Post a Meme!

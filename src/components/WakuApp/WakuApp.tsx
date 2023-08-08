@@ -8,15 +8,8 @@ export function WakuApp(): React.ReactNode {
   return (
     <>
       <DecentralizedNet>
-        <div className="mb-20 columns-2">
-          <div className="mx-auto">
-            <IPFS />
-          </div>
-
-          <div className="mx-auto">
-            <Waku />
-          </div>
-        </div>
+        <IPFS />
+        <Waku />
       </DecentralizedNet>
 
       <MemeGallery />

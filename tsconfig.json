@@ -1,38 +1,47 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowImportingTsExtensions": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "baseUrl": ".",
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
     "ignoreDeprecations": "5.0",
     "importsNotUsedAsValues": "error",
+    "isolatedModules": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "jsxImportSource": "react",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "allowJs": false,
-    "typeRoots": ["node_modules/@types", "src/types"],
-    "useDefineForClassFields": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+    "useDefineForClassFields": true
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"

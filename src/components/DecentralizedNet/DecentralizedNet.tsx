@@ -5,7 +5,9 @@ import { MemeUploader } from "../MemeUploader/MemeUploader";
 export function DecentralizedNet({ children }: ChildrenProp): React.ReactNode {
   return (
     <div className="px-6 pb-20 text-center">
-      {children}
+      <div className="mb-10 flex justify-center content-center gap-5">
+        {children}
+      </div>
 
       <MemeUploader />
     </div>

@@ -10,7 +10,7 @@ export function Header({ title }: HeaderProps): React.ReactNode {
     <header>
       <Nav />
 
-      <div className="px-6 py-20 text-center">
+      <div className="px-6 py-10 text-center">
         <h1 className="mb-6 text-5xl font-bold text-high-contrast dark:text-high-contrast-dark">
           {title}
         </h1>

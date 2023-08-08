@@ -1,11 +1,23 @@
 import type React from "react";
-import { useTheme } from "../../hooks/useTheme";
+import { useState, useEffect } from 'react'
+import { themeStore } from "../../store/theme";
+import { useStore } from "@nanostores/react"
 
 export function Logo(): React.ReactNode {
-  const { theme } = useTheme();
+  const theme = useStore(themeStore);
 
-  const isDarkMode = theme === "dark";
-  const color = isDarkMode ? "#e7f9fb" : "#072830";
+  const [isDarkMode, setDarkMode] = useState(theme === "dark");
+  const [color, setColor] = useState(isDarkMode ? "#e7f9fb" : "#072830");
+
+  useEffect(() => {
+    if (theme === "dark") {
+      setDarkMode(true)
+      setColor("#e7f9fb")
+    } else {
+      setDarkMode(false)
+      setColor("#072830")
+    }
+  }, [theme, color, isDarkMode])
 
   return (
     <svg

@@ -1,6 +1,9 @@
 import { Field, Type } from "protobufjs";
-import type { AcceptedMemeFormatMime } from "./types/meme";
 import { MemeFormat } from "./types/meme";
+
+import type { Unsubscribe } from "@waku/interfaces";
+import type { RetrieveMemeCallback } from "./types/helia";
+import type { AcceptedMemeFormatMime } from "./types/meme";
 import type { CardType, ObjectType } from "./types/type";
 
 export const conf = {
@@ -28,7 +31,7 @@ export const conf = {
 export function isAcceptedMemeFormatMime(
   mime: unknown,
 ): mime is AcceptedMemeFormatMime {
-  return (mime as AcceptedMemeFormatMime) !== undefined;
+  return (mime as AcceptedMemeFormatMime) !== undefined && mime !== null;
 }
 
 // No builtin way to iterate enum values in TypeScript unfortunately
@@ -49,15 +52,24 @@ export const formatToMimeMapping: Record<MemeFormat, AcceptedMemeFormatMime> = {
 export const MemeMessage = new Type("Meme")
   .add(new Field("timestamp", 1, "uint64"))
   .add(new Field("hash", 2, "string"))
-  .add(new Field("format", 3, "enum"));
+  .add(new Field("format", 3, "uint64"));
 
 export const contentTopic = "/waku-meme-board/1/meme/proto";
 
-// For explicit checking
-export function isNullOrUndef(datum: unknown): datum is undefined | null {
-  return datum !== null && datum !== undefined;
-}
-
 export function isPromise<T>(val: unknown): val is Promise<T> {
   return val instanceof Promise;
+}
+
+export function isFunction<T>(fn: T | unknown): fn is T {
+  return fn !== undefined && fn !== null && typeof fn === "function";
+}
+
+export function isUnsubscribeCallback(cb: unknown): cb is Unsubscribe {
+  return isFunction<Unsubscribe>(cb);
+}
+
+export function isRetrieveMemeCallback(
+  cb: unknown,
+): cb is RetrieveMemeCallback {
+  return isFunction<RetrieveMemeCallback>(cb);
 }
