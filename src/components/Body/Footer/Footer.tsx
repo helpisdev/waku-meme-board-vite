@@ -1,5 +1,5 @@
-import type React from "react";
+import type React from 'react';
 
-export function Footer(): React.ReactNode {
-  return <footer className="h-20"></footer>;
+export default function Footer(): React.ReactNode {
+  return <footer className='h-20' />;
 }

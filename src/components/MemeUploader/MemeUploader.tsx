@@ -1,41 +1,33 @@
-import * as Form from "@radix-ui/react-form";
-import { useCallback } from "react";
-import { handleMemeSubmit } from "../../store/waku";
+import * as Form from '@radix-ui/react-form';
+import type React from 'react';
+import { useCallback } from 'react';
 
-import type React from "react";
+import { handleMemeSubmit } from '../../store/waku';
 
-export function MemeUploader(): React.ReactNode {
-
-  const handler = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      handleMemeSubmit(e)
-        .catch((e) => console.error(e));
-    },
-    [],
-  );
+export default function MemeUploader(): React.ReactNode {
+  const handler = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    handleMemeSubmit(e).catch((err) => console.error(err));
+  }, []);
 
   return (
-    <Form.Root className="mx-auto block max-w-sm rounded-lg border-2 border-subtle-borders-and-seperators bg-app p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:border-subtle-borders-and-seperators-dark dark:bg-app-dark">
-      <Form.Field className="" name="meme">
-        <div className="mb-3">
-          <Form.Label className="mb-2 inline-block text-high-contrast dark:text-high-contrast-dark">
+    <Form.Root className='mx-auto block max-w-sm rounded-lg border-2 border-subtle-borders-and-seperators bg-app p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:border-subtle-borders-and-seperators-dark dark:bg-app-dark'>
+      <Form.Field className='' name='meme'>
+        <div className='mb-3'>
+          <Form.Label className='mb-2 inline-block text-high-contrast dark:text-high-contrast-dark'>
             Choose an image:
           </Form.Label>
 
-          <Form.Message match="valueMissing">
-            Please select an image
-          </Form.Message>
+          <Form.Message match='valueMissing'>Please select an image</Form.Message>
 
-          <Form.Message match="typeMismatch">
+          <Form.Message match='typeMismatch'>
             Please select an image with a format of jpeg, jpg, png, or gif
           </Form.Message>
         </div>
 
         <Form.Control asChild>
           <input
-            accept=".jpg, .png, .jpeg, .gif"
-            className="file:border-inherit
-                      focus:border-primary
+            accept='.jpg, .png, .jpeg, .gif'
+            className='focus:border-primary
                       focus:shadow-te-primary
                       dark:focus:border-primary
                       relative
@@ -46,7 +38,6 @@ export function MemeUploader(): React.ReactNode {
                       flex-auto
                       rounded
                       border
-                      border-solid
                       border-ui-el-borders-and-focus-rings
                       bg-clip-padding
                       px-3
@@ -57,8 +48,8 @@ export function MemeUploader(): React.ReactNode {
                       transition
                       duration-300
                       ease-in-out
-                      file:-mx-3
-                      file:-my-[0.32rem]
+                      file:mx-3
+                      file:my-[0.32rem]
                       file:overflow-hidden
                       file:rounded-none
                       file:border-0
@@ -83,17 +74,17 @@ export function MemeUploader(): React.ReactNode {
                       dark:file:text-high-contrast-dark
                       hover:dark:file:bg-hovered-ui-el-dark
                       focus:dark:text-high-contrast-dark
-"
-            id="uploader"
+'
+            id='uploader'
             required
-            type="file"
+            type='file'
           />
         </Form.Control>
       </Form.Field>
 
       <Form.Submit asChild>
         <button
-          className="
+          className='
         dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]]
         mt-2.5
         inline-block
@@ -125,11 +116,11 @@ export function MemeUploader(): React.ReactNode {
         dark:focus:bg-hovered-solid-dark
         dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]
         dark:active:bg-hovered-solid-dark
-        "
-          data-te-ripple-color="light"
+        '
+          data-te-ripple-color='light'
           data-te-ripple-init
           onClick={handler}
-          type="submit"
+          type='submit'
         >
           Post a Meme!
         </button>

@@ -1,6 +1,7 @@
-import type React from "react";
-import type { ChildrenProp } from "../../../types/type";
+import type React from 'react';
 
-export function Main({ children }: ChildrenProp): React.ReactNode {
+import type { ChildrenProp } from '../../../types/type';
+
+export default function Main({ children }: ChildrenProp): React.ReactNode {
   return <main>{children}</main>;
 }

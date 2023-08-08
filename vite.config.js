@@ -1,53 +1,74 @@
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { defineConfig } from "vite";
-// import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-// import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-// import { NgmiPolyfill } from "vite-plugin-ngmi-polyfill"
-// import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
+import react from '@vitejs/plugin-react-swc';
+import path from 'path';
+import { defineConfig } from 'vite';
+import { comlink } from 'vite-plugin-comlink';
+import eslint from 'vite-plugin-eslint';
+import htmlEnv from 'vite-plugin-html-env';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { configDefaults } from 'vitest/config';
 
-// https://vitejs.dev/config/
+/** @type {import('vite').UserConfig} */
 export default defineConfig({
-	plugins: [react(), /*NgmiPolyfill()*/],
-	define: {
-		"process.env": process.env ?? {},
-	},
-	resolve: {
-		alias: [{
-			find: "@",
-			replacement: path.resolve(__dirname, "/src"),
-			// sys: 'util',
-			// crypto: "crypto-browserify",
-		}],
-	},
-	build: {
-		chunkSizeWarningLimit: 2000,
-		target: "esnext",
-		// rollupOptions: {
-		//   plugins: [
-		//      rollupNodePolyFill()
-		//   ]
-		// }
-	},
-	optimizeDeps: {
-		esbuildOptions: {
-			target: "esnext",
-			// define: {
-			//     global: 'globalThis'
-			// },
-			// plugins: [
-			//   NodeGlobalsPolyfillPlugin({
-			//       process: true,
-			//       buffer: true
-			//   }),
-			// 	NodeModulesPolyfillPlugin()
-			// ]
-		}
-	},
-	parserOptions: {
-		ecmaVersion: "latest",
-		sourceType: "module",
-		project: ["./tsconfig.json", "./tsconfig.node.json"],
-		tsconfigRootDir: __dirname,
-	},
+  define: {
+    'process.env': process.env,
+  },
+  plugins: [
+    react(),
+    comlink(),
+    htmlEnv(),
+    {
+      ...eslint({
+        failOnWarning: true,
+        failOnError: true,
+      }),
+      apply: 'build',
+    },
+    {
+      ...eslint({
+        failOnWarning: false,
+        failOnError: true,
+      }),
+      apply: 'serve',
+      enforce: 'post',
+    },
+    tsconfigPaths(),
+  ],
+  worker: {
+    plugins: [comlink()],
+  },
+  resolve: {
+    alias: {
+      find: '@',
+      replacement: path.resolve(__dirname, '/src'),
+    },
+  },
+  css: {
+    modules: {
+      scopeBehaviour: 'local',
+      localsConvention: 'dashes',
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./tests/test-setup.js'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+    },
+    exclude: [...configDefaults.exclude, './tests/e2e/*'],
+  },
+  build: {
+    chunkSizeWarningLimit: 2000,
+    target: 'esnext',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+      // Node.js global to browser globalThis
+      define: {
+        global: 'globalThis',
+      },
+    },
+  },
 });

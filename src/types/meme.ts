@@ -11,8 +11,4 @@ export const enum MemeFormat {
   GIF = 3,
 }
 
-export type AcceptedMemeFormatMime =
-  | "image/gif"
-  | "image/jpeg"
-  | "image/jpg"
-  | "image/png";
+export type AcceptedMemeFormatMime = 'image/gif' | 'image/jpeg' | 'image/jpg' | 'image/png';

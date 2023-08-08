@@ -1,14 +1,15 @@
-import type React from "react";
-import { useState, useEffect } from "react";
-import { closeIDBStores, heliaStore, startHelia } from "../../store/helia";
-import { useStore } from "@nanostores/react";
-import { NetworkConnector } from "../NetworkConnector/NetworkConnector";
-import { Node } from "../Node/Node";
+import { useStore } from '@nanostores/react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 
-export function IPFS(): React.ReactNode {
+import { closeIDBStores, heliaStore, startHelia } from '../../store/helia';
+import NetworkConnector from '../NetworkConnector/NetworkConnector';
+import Node from '../Node/Node';
+
+export default function IPFS(): React.ReactNode {
   const helia = useStore(heliaStore);
-  const [started, setStarted] = useState<boolean>(false)
-  const [error, setError] = useState<boolean>(false)
+  const [started, setStarted] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const online: boolean = helia.status === 'online';
@@ -20,21 +21,21 @@ export function IPFS(): React.ReactNode {
       }
       setStarted(true);
     }
-  }, [helia, started, error])
+  }, [helia, started, error]);
 
   useEffect(() => {
     return () => {
       closeIDBStores();
-    }
-  }, [])
+    };
+  }, []);
 
   if (error) {
     // Show error message
   }
 
   if (!started) {
-    return <NetworkConnector network="IPFS" />;
+    return <NetworkConnector network='IPFS' />;
   }
 
-  return <Node id={helia.id!} network="IPFS" status={helia.status} />;
+  return <Node id={helia.id!} network='IPFS' status={helia.status} />;
 }

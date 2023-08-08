@@ -1,23 +1,19 @@
-import { PageDirection, Protocols } from "@waku/interfaces";
-import {
-  createDecoder,
-  createEncoder,
-  createLightNode,
-  waitForRemotePeer,
-} from "@waku/sdk";
-import { map } from "nanostores";
+// eslint-disable-next-line simple-import-sort/imports
+import type { IDecodedMessage, Unsubscribe, Waku } from '@waku/interfaces';
+import { PageDirection, Protocols } from '@waku/interfaces';
+import { createDecoder, createEncoder, createLightNode, waitForRemotePeer } from '@waku/sdk';
+import { map } from 'nanostores';
+
+import type { Meme, MemeFormat } from '../types/meme';
+import type { ReceiveMemeCallback, WakuInterface } from '../types/waku';
 import {
   MemeMessage,
   contentTopic,
   isAcceptedMemeFormatMime,
   isRetrieveMemeCallback,
   mimeToFormatMapping,
-} from "../util";
-
-import type { IDecodedMessage, Unsubscribe, Waku } from "@waku/interfaces";
-import type { Meme, MemeFormat } from "../types/meme";
-import type { ReceiveMemeCallback, WakuInterface } from "../types/waku";
-import { addMeme, libp2pOptions } from "./helia";
+} from '../util';
+import { addMeme, libp2pOptions } from './helia';
 
 export const wakuStore = map<WakuInterface>({
   waku: null,
@@ -26,22 +22,17 @@ export const wakuStore = map<WakuInterface>({
   id: null,
   encoder: null,
   decoder: null,
-  status: "offline",
+  status: 'offline',
   uploadMeme: null,
   uploadingMeme: false,
   retrieveStoredMemes: null,
   filterMemes: null,
 });
 
-export async function uploadMeme(
-  hash: string,
-  format: MemeFormat,
-): Promise<void> {
+export async function uploadMeme(hash: string, format: MemeFormat): Promise<void> {
   const store = wakuStore.get();
-  const waku = store.waku;
-  const encoder = store.encoder;
 
-  if (waku && encoder) {
+  if (store.waku && store.encoder) {
     const proto = MemeMessage.create({
       timestamp: new Date(Date.now()),
       hash,
@@ -49,7 +40,7 @@ export async function uploadMeme(
     });
     const memeData = MemeMessage.encode(proto).finish();
 
-    await waku.lightPush.send(encoder, {
+    await store.waku.lightPush.send(store.encoder, {
       payload: memeData,
       timestamp: new Date(Date.now()),
     });
@@ -58,13 +49,11 @@ export async function uploadMeme(
 
 export async function retrieveStoredMemes(): Promise<Meme[]> {
   const store = wakuStore.get();
-  const waku = store.waku;
-  const decoder = store.decoder;
 
   const results: Meme[] = [];
 
-  if (waku?.store && decoder) {
-    const storeQuery = waku.store.queryGenerator([decoder], {
+  if (store.waku?.store && store.decoder) {
+    const storeQuery = store.waku.store.queryGenerator([store.decoder], {
       pageDirection: PageDirection.BACKWARD,
     });
 
@@ -86,9 +75,7 @@ export async function retrieveStoredMemes(): Promise<Meme[]> {
   return results;
 }
 
-export function decodeMeme(
-  encodedMeme?: IDecodedMessage | undefined,
-): Meme | null {
+export function decodeMeme(encodedMeme?: IDecodedMessage | undefined): Meme | null {
   if (!encodedMeme?.payload) {
     return null;
   }
@@ -100,11 +87,9 @@ export async function filterMemes(
   callback?: ReceiveMemeCallback | undefined,
 ): Promise<Unsubscribe | undefined> {
   const store = wakuStore.get();
-  const waku = store.waku;
-  const decoder = store.decoder;
 
-  if (waku && decoder) {
-    return await waku.filter.subscribe([decoder], (msg: IDecodedMessage) => {
+  if (store.waku && store.decoder) {
+    return store.waku.filter.subscribe([store.decoder], (msg: IDecodedMessage) => {
       const meme = decodeMeme(msg);
 
       if (meme && isRetrieveMemeCallback(callback)) {
@@ -116,12 +101,10 @@ export async function filterMemes(
   return undefined;
 }
 
-export async function handleMemeSubmit(
-  e: React.MouseEvent<HTMLButtonElement>,
-): Promise<void> {
+export async function handleMemeSubmit(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
   e.preventDefault();
-  wakuStore.setKey("uploadingMeme", true);
-  const meme: HTMLElement | null = document.getElementById("uploader");
+  wakuStore.setKey('uploadingMeme', true);
+  const meme: HTMLElement | null = document.getElementById('uploader');
 
   try {
     if (meme) {
@@ -140,56 +123,56 @@ export async function handleMemeSubmit(
           }
         }
       }
-      wakuStore.setKey("uploadingMeme", false);
+      wakuStore.setKey('uploadingMeme', false);
       return;
     }
-    wakuStore.setKey("uploadingMeme", "error");
-    throw "Invalid file.";
+    wakuStore.setKey('uploadingMeme', 'error');
+
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    throw 'Invalid file.';
   } catch (err) {
     console.error(err);
-    wakuStore.setKey("uploadingMeme", "error");
+    wakuStore.setKey('uploadingMeme', 'error');
     throw err;
   }
 }
 
 export async function startWaku(): Promise<void> {
   const store = wakuStore.get();
-  const waku = store.waku;
-  const starting = store.starting;
 
-  if (!waku && !starting) {
+  if (!store.waku && !store.starting) {
     try {
-      wakuStore.setKey("starting", true);
-      console.info("Starting Waku");
+      wakuStore.setKey('starting', true);
+      console.info('Starting Waku');
 
       const waku = await createLightNode({
         defaultBootstrap: true,
         pubSubTopic: contentTopic,
         libp2p: await libp2pOptions,
       });
-      wakuStore.setKey("waku", waku);
+      wakuStore.setKey('waku', waku);
 
       const enc = createEncoder({
         contentTopic,
         ephemeral: false,
       });
-      wakuStore.setKey("encoder", enc);
+      wakuStore.setKey('encoder', enc);
 
       const dec = createDecoder(contentTopic);
-      wakuStore.setKey("decoder", dec);
+      wakuStore.setKey('decoder', dec);
 
-      wakuStore.setKey("id", waku.libp2p.peerId.toString());
+      wakuStore.setKey('id', waku.libp2p.peerId.toString());
       await waku.start();
 
       const nodeIsOnline = waku.libp2p.isStarted();
-      wakuStore.setKey("status", nodeIsOnline ? "online" : "offline");
+      wakuStore.setKey('status', nodeIsOnline ? 'online' : 'offline');
 
       await waitForRemotePeer(waku as unknown as Waku, [
         Protocols.Store,
         Protocols.LightPush,
         Protocols.Filter,
       ]);
-      wakuStore.setKey("starting", false);
+      wakuStore.setKey('starting', false);
     } catch (e) {
       console.error(e);
       throw e;

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { startWaku, wakuStore } from "../../store/waku";
-import { NetworkConnector } from "../NetworkConnector/NetworkConnector";
-import { Node } from "../Node/Node";
-import { useStore } from "@nanostores/react"
+import { useStore } from '@nanostores/react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 
-import type React from "react";
+import { startWaku, wakuStore } from '../../store/waku';
+import NetworkConnector from '../NetworkConnector/NetworkConnector';
+import Node from '../Node/Node';
 
-export function Waku(): React.ReactNode {
+export default function Waku(): React.ReactNode {
   const waku = useStore(wakuStore);
   const [started, setStarted] = useState(false);
   const [error, setError] = useState(false);
@@ -21,15 +21,15 @@ export function Waku(): React.ReactNode {
       }
       setStarted(true);
     }
-  }, [waku, started, error])
+  }, [waku, started, error]);
 
   if (error) {
     // Show error message
   }
 
   if (!started) {
-    return <NetworkConnector network="Waku" />;
+    return <NetworkConnector network='Waku' />;
   }
 
-  return <Node id={waku.id!} network="Waku" status={waku.status} />;
+  return <Node id={waku.id!} network='Waku' status={waku.status} />;
 }

@@ -7,31 +7,44 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "baseUrl": ".",
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "downlevelIteration": false,
     "esModuleInterop": true,
-    "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
-    "ignoreDeprecations": "5.0",
     "importsNotUsedAsValues": "error",
+    "incremental": true,
+    "inlineSources": false,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
     ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "strictNullChecks": true,
     "target": "ESNext",
     "typeRoots": [
       "node_modules/@types",
@@ -39,12 +52,27 @@
     ],
     "useDefineForClassFields": true
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
-    "src"
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mjs",
+    "**/*.json",
+    "src",
+    "tests/unit/App.test.ts",
+    "vite.config.js"
   ],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
+  ],
+  "types": [
+    "node",
+    "jest",
+    "@testing-library/jest-dom"
   ]
 }
