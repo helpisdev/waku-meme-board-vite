@@ -1,0 +1,134 @@
+import { LightNode, PageDirection } from '@waku/interfaces';
+import { useFilterMessages, useStoreMessages } from '@waku/react';
+import { Decoder } from '@waku/sdk';
+import React, { useEffect, useState } from 'react';
+
+import type { IMeme } from '../../types/interface';
+import { MemeInfo, RetrieveMemeCallback } from '../../types/type';
+import { MemeMessage } from '../../util';
+
+interface Props {
+  readonly node: LightNode | undefined;
+  readonly decoder: Decoder;
+  readonly retrieveMeme: RetrieveMemeCallback;
+  readonly uploading: boolean;
+}
+export default function MemeGallery({
+  node,
+  decoder,
+  retrieveMeme,
+  uploading,
+}: Props): React.ReactNode {
+  const [memes, setMemes] = useState<MemeInfo[]>([]);
+  const { error, messages, isLoading } = useFilterMessages({
+    node,
+    decoder,
+  });
+  const store = useStoreMessages({
+    node,
+    decoder,
+    options: {
+      pageDirection: PageDirection.BACKWARD,
+    },
+  });
+
+  const filter = (sources: MemeInfo[]): MemeInfo[] => {
+    return [...sources]
+      .filter((meme) => meme.timestamp.valueOf() !== 0)
+      .filter((meme, i, arr) => !arr.find((m, j) => j > i && meme.hash === m.hash))
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+      .reverse();
+  };
+
+  useEffect(() => {
+    const retrieveMemes = async () => {
+      if (!store.isLoading) {
+        const results: IMeme[] = [];
+        const query = store.messages;
+        for (const meme of query) {
+          if (meme) {
+            const { hash, timestamp, format }: IMeme = MemeMessage.decode(
+              meme.payload,
+            ) as unknown as IMeme;
+
+            results.push({ hash, timestamp, format });
+          }
+        }
+        const sources: MemeInfo[] = [];
+        for (const meme of results) {
+          if (!memes.find((m) => m.hash === meme.hash)) {
+            const src = await retrieveMeme(meme);
+            if (src?.src) {
+              sources.push({ src: src.src, ...meme });
+            }
+          }
+        }
+        const filtered = filter([...sources, ...memes]);
+        console.log(JSON.stringify(filtered));
+
+        setMemes(filtered);
+      }
+    };
+
+    if (store.error) {
+      console.error(store.error);
+    }
+
+    retrieveMemes().catch(console.error);
+  }, [memes, store.isLoading, store.messages, store.error, retrieveMeme]);
+
+  useEffect(() => {
+    const loadMemes = async () => {
+      if (!isLoading) {
+        for (const msg of messages) {
+          if (msg.payload) {
+            const meme = MemeMessage.decode(msg.payload) as unknown as IMeme;
+            if (meme) {
+              if (!memes.find((m) => m.hash === meme.hash)) {
+                const src = await retrieveMeme(meme);
+                if (src?.src) {
+                  setMemes(filter([{ src: src.src, ...meme }, ...memes]));
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    if (error) {
+      console.error(error);
+    }
+
+    loadMemes().catch(console.error);
+  }, [memes, isLoading, error, messages, retrieveMeme]);
+
+  if (memes.length === 0) {
+    return (
+      <p className='text-center text-3xl text-high-contrast dark:text-high-contrast-dark'>
+        No memes to show 😢
+      </p>
+    );
+  }
+
+  if (uploading) {
+    return (
+      <div className='text-center text-3xl text-high-contrast dark:text-high-contrast-dark'>
+        Uploading meme...
+      </div>
+    );
+  }
+
+  return (
+    <div className='max-w-10xl mx-auto flex flex-row flex-wrap items-center justify-evenly gap-y-2'>
+      {memes.map((meme) => (
+        <img
+          alt='gallery'
+          className='b-6 max-w w-full max-w-sm break-inside-avoid rounded-lg border-4 border-ui-el-borders-and-focus-rings bg-app dark:border-ui-el-borders-and-focus-rings-dark dark:bg-app-dark'
+          src={meme.src}
+          key={meme.hash}
+        />
+      ))}
+    </div>
+  );
+}

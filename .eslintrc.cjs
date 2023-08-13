@@ -87,6 +87,7 @@ module.exports = {
   },
   rules: {
     'import/no-unresolved': 'off',
+    'no-console': 'off',
     'tailwindcss/no-custom-classname': 'off',
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.tsx', '.ts'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
@@ -103,7 +104,6 @@ module.exports = {
     'jest-dom/prefer-enabled-disabled': 'error',
     'jest-dom/prefer-required': 'error',
     'jest-dom/prefer-to-have-attribute': 'error',
-    'testing-library/await-async-query': 'error',
     'testing-library/no-await-sync-query': 'off',
     'testing-library/no-debugging-utils': 'warn',
     'testing-library/no-dom-import': 'off',

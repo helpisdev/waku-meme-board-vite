@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 
-import { themeStore, toggleTheme as toggle } from '../../store/theme';
+import { themeStore, toggleTheme as toggle } from '../../../provider/theme';
 
 export default function ThemeToggle(): React.ReactNode {
   const theme = useStore(themeStore);

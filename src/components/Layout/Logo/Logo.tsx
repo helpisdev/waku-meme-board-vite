@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 
-import { themeStore } from '../../store/theme';
+import { themeStore } from '../../../provider/theme';
 
 export default function Logo(): React.ReactNode {
   const theme = useStore(themeStore);

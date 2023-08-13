@@ -13,7 +13,6 @@
     "downlevelIteration": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
     "incremental": true,
     "inlineSources": false,
     "isolatedModules": true,
