@@ -147,7 +147,7 @@
     "sentry-testkit": "^5.0.5",
     "shx": "^0.3.4",
     "sort-package-json": "^2.5.1",
-    "storybook": "^7.2.3",
+    "storybook": "^7.4.0",
     "storybook-addon-designs": "^6.3.1",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
