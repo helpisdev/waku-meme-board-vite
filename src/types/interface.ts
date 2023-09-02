@@ -2,6 +2,7 @@ import type { Helia } from '@helia/interface';
 import type { UnixFS } from '@helia/unixfs';
 import type { LightNode } from '@waku/interfaces';
 import type { Decoder, Encoder } from '@waku/sdk';
+import { IDBBlockstore } from 'blockstore-idb';
 import type { IDBDatastore } from 'datastore-idb';
 import type * as React from 'react';
 
@@ -22,7 +23,6 @@ export interface INode<T> {
 
 export interface IHelia extends INode<Helia> {
   fs?: UnixFS | undefined;
-  libp2pOptions?: IPartiaLibp2pOptions | undefined;
 }
 
 export interface IMeme {
@@ -38,4 +38,8 @@ export interface IChildrenProp {
 export interface IWaku extends INode<LightNode> {
   encoder: Encoder;
   decoder: Decoder;
+}
+
+export interface ILibp2pOptionsWithBlockstore extends IPartiaLibp2pOptions {
+  blockstore: IDBBlockstore;
 }

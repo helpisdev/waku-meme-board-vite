@@ -1,10 +1,10 @@
 import type React from 'react';
 import { useState } from 'react';
 
-import MemeGallery from '../components/Meme/Gallery';
-import MemeUploader from '../components/Meme/Uploader';
-import { IHelia, IWaku } from '../types/interface';
-import { AddMemeCallback, RetrieveMemeCallback } from '../types/type';
+import { IHelia, IWaku } from '../../types/interface';
+import { AddMemeCallback, RetrieveMemeCallback } from '../../types/type';
+import MemeGallery from './Gallery';
+import MemeUploader from './Uploader';
 
 interface Props {
   readonly helia: IHelia & {
@@ -14,7 +14,7 @@ interface Props {
   readonly waku: IWaku;
 }
 
-export default function MemeProvider({ helia, waku }: Props): React.ReactNode {
+export default function Meme({ helia, waku }: Props): React.ReactNode {
   const [uploadingMeme, setUploadingMeme] = useState<boolean>(false);
   return (
     <div>

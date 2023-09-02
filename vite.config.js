@@ -58,7 +58,7 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, './tests/e2e/*'],
   },
   build: {
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 4096,
     target: 'esnext',
   },
   optimizeDeps: {

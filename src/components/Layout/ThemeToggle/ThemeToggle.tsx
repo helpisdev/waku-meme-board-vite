@@ -18,7 +18,7 @@ export default function ThemeToggle(): React.ReactNode {
       setDarkMode(false);
       setColor('#072830');
     }
-  }, [theme, color, isDarkMode]);
+  }, [theme]);
 
   return (
     <div className='w-full'>

@@ -3,9 +3,5 @@
 @tailwind utilities;
 
 html {
-  background-color: '#fdfdfc';
-}
-
-html.dark {
-  background-color: '#fdfdfc';
+  height: 100vh;
 }

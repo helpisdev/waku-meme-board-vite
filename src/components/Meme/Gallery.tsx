@@ -1,7 +1,7 @@
 import { LightNode, PageDirection } from '@waku/interfaces';
 import { useFilterMessages, useStoreMessages } from '@waku/react';
 import { Decoder } from '@waku/sdk';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import type { IMeme } from '../../types/interface';
 import { MemeInfo, RetrieveMemeCallback } from '../../types/type';
@@ -19,7 +19,8 @@ export default function MemeGallery({
   retrieveMeme,
   uploading,
 }: Props): React.ReactNode {
-  const [memes, setMemes] = useState<MemeInfo[]>([]);
+  const memes = useRef<MemeInfo[]>([]);
+  const [fetched, setFetched] = useState<boolean>(false);
   const { error, messages, isLoading } = useFilterMessages({
     node,
     decoder,
@@ -56,17 +57,19 @@ export default function MemeGallery({
         }
         const sources: MemeInfo[] = [];
         for (const meme of results) {
-          if (!memes.find((m) => m.hash === meme.hash)) {
+          if (!memes.current.find((m) => m.hash === meme.hash)) {
             const src = await retrieveMeme(meme);
             if (src?.src) {
               sources.push({ src: src.src, ...meme });
             }
           }
         }
-        const filtered = filter([...sources, ...memes]);
-        console.log(JSON.stringify(filtered));
 
-        setMemes(filtered);
+        const filtered = filter([...sources, ...memes.current]);
+        memes.current = filtered;
+        if (filtered.length !== 0) {
+          setFetched(true);
+        }
       }
     };
 
@@ -75,7 +78,7 @@ export default function MemeGallery({
     }
 
     retrieveMemes().catch(console.error);
-  }, [memes, store.isLoading, store.messages, store.error, retrieveMeme]);
+  }, [store.isLoading, store.messages, store.error, retrieveMeme]);
 
   useEffect(() => {
     const loadMemes = async () => {
@@ -84,10 +87,10 @@ export default function MemeGallery({
           if (msg.payload) {
             const meme = MemeMessage.decode(msg.payload) as unknown as IMeme;
             if (meme) {
-              if (!memes.find((m) => m.hash === meme.hash)) {
+              if (!memes.current.find((m) => m.hash === meme.hash)) {
                 const src = await retrieveMeme(meme);
                 if (src?.src) {
-                  setMemes(filter([{ src: src.src, ...meme }, ...memes]));
+                  memes.current = filter([{ src: src.src, ...meme }, ...memes.current]);
                 }
               }
             }
@@ -101,9 +104,11 @@ export default function MemeGallery({
     }
 
     loadMemes().catch(console.error);
-  }, [memes, isLoading, error, messages, retrieveMeme]);
+  }, [isLoading, error, messages, retrieveMeme]);
 
-  if (memes.length === 0) {
+  useEffect(() => {}, [fetched]);
+
+  if (memes.current.length === 0) {
     return (
       <p className='text-center text-3xl text-high-contrast dark:text-high-contrast-dark'>
         No memes to show 😢
@@ -121,7 +126,7 @@ export default function MemeGallery({
 
   return (
     <div className='max-w-10xl mx-auto flex flex-row flex-wrap items-center justify-evenly gap-y-2'>
-      {memes.map((meme) => (
+      {memes.current.map((meme) => (
         <img
           alt='gallery'
           className='b-6 max-w w-full max-w-sm break-inside-avoid rounded-lg border-4 border-ui-el-borders-and-focus-rings bg-app dark:border-ui-el-borders-and-focus-rings-dark dark:bg-app-dark'

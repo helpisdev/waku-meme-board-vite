@@ -1,10 +1,11 @@
+// eslint-disable-next-line simple-import-sort/imports
 import './index.css';
 
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import Layout from './components/Layout/Layout';
-import HeliaProvider from './provider/HeliaProvider';
+import WakuProvider from './provider/WakuProvider';
 import { setupTheme } from './provider/theme';
 
 export default function App(): React.ReactNode {
@@ -12,7 +13,7 @@ export default function App(): React.ReactNode {
 
   return (
     <Layout title='Waku Meme Board'>
-      <HeliaProvider />
+      <WakuProvider />
     </Layout>
   );
 }
