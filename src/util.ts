@@ -38,7 +38,7 @@ export const MemeMessage = new Type('Meme')
   .add(new Field('hash', 2, 'string'))
   .add(new Field('format', 3, 'uint64'));
 
-export const contentTopic = '/waku-meme-board/1/meme/proto';
+export const contentTopic = '/waku-meme-board-vite/1/meme/proto';
 
 export function isPromise<T>(val: unknown): val is Promise<T> {
   return val instanceof Promise;

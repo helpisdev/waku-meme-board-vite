@@ -1,7 +1,7 @@
 import { LightNode, PageDirection } from '@waku/interfaces';
 import { useFilterMessages, useStoreMessages } from '@waku/react';
 import { Decoder } from '@waku/sdk';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { IMeme } from '../../types/interface';
 import { MemeInfo, RetrieveMemeCallback } from '../../types/type';
@@ -41,8 +41,8 @@ export default function MemeGallery({
       .reverse();
   };
 
-  useEffect(() => {
-    const retrieveMemes = async () => {
+  const retrieveMemes = useCallback(
+    async function retrieveMemes() {
       if (!store.isLoading) {
         const results: IMeme[] = [];
         const query = store.messages;
@@ -67,21 +67,26 @@ export default function MemeGallery({
 
         const filtered = filter([...sources, ...memes.current]);
         memes.current = filtered;
+
         if (filtered.length !== 0) {
           setFetched(true);
         }
       }
-    };
-
-    if (store.error) {
-      console.error(store.error);
-    }
-
-    retrieveMemes().catch(console.error);
-  }, [store.isLoading, store.messages, store.error, retrieveMeme]);
+      if (store.error) {
+        console.error(store.error);
+      }
+    },
+    [store.isLoading, store.messages, store.error, retrieveMeme],
+  );
 
   useEffect(() => {
-    const loadMemes = async () => {
+    retrieveMemes().catch((e) => {
+      console.error(e);
+    });
+  }, [retrieveMemes]);
+
+  const loadMemes = useCallback(
+    async function loadMemes() {
       if (!isLoading) {
         for (const msg of messages) {
           if (msg.payload) {
@@ -97,14 +102,18 @@ export default function MemeGallery({
           }
         }
       }
-    };
+      if (error) {
+        console.error(error);
+      }
+    },
+    [isLoading, error, messages, retrieveMeme],
+  );
 
-    if (error) {
-      console.error(error);
-    }
-
-    loadMemes().catch(console.error);
-  }, [isLoading, error, messages, retrieveMeme]);
+  useEffect(() => {
+    loadMemes().catch((e) => {
+      console.error(e);
+    });
+  }, [loadMemes]);
 
   useEffect(() => {}, [fetched]);
 

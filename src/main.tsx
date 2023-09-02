@@ -1,4 +1,5 @@
 // eslint-disable-next-line simple-import-sort/imports
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import './index.css';
 
 import React, { useEffect } from 'react';
@@ -18,8 +19,25 @@ export default function App(): React.ReactNode {
   );
 }
 
+function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+  return (
+    <div role='alert'>
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+      <button type='button' onClick={resetErrorBoundary}>
+        Try again
+      </button>
+    </div>
+  );
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={(error, info) => console.error('Caught an error:', error, info)}
+    >
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>,
 );

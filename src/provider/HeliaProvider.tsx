@@ -36,8 +36,6 @@ function useCreateHeliaNode({ options }: Props): IHelia & {
         const heliaNode = await createHelia({
           datastore: options?.datastore,
           blockstore: options?.blockstore,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          // libp2p: waku.node?.libp2p as any,
           start: true,
         });
         setHelia(heliaNode);
@@ -77,17 +75,17 @@ function useCreateHeliaNode({ options }: Props): IHelia & {
       }
 
       let bytes: Uint8Array = new Uint8Array();
-      for await (const chunk of fs.cat(parsedCID)) {
+
+      const cat = fs.cat(parsedCID, {});
+      for await (const chunk of cat) {
         bytes = new Uint8Array([...bytes, ...chunk]);
       }
 
       const mime = formatToMimeMapping[format];
       const blob = new Blob([bytes], { type: mime });
-
       const imageUrl = URL.createObjectURL(blob);
       const image = new Image();
       image.src = imageUrl;
-
       return image;
     },
     [fs],
@@ -126,8 +124,8 @@ export default function HeliaProvider({ waku, options }: Props): React.ReactNode
     <div>
       <div className='px-6 text-center'>
         <div className='mb-10 flex content-center justify-center gap-5'>
-          <NodeLauncher<IHelia, Helia> node={helia} network='Helia' />
           <NodeLauncher<IWaku, LightNode> node={waku} network='Waku' />
+          <NodeLauncher<IHelia, Helia> node={helia} network='Helia' />
         </div>
       </div>
       {helia.node && waku.node && <Meme helia={helia} waku={waku} />}

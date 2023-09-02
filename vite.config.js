@@ -47,10 +47,6 @@ export default defineConfig({
       localsConvention: 'dashes',
     },
   },
-  server: {
-    host: "0.0.0.0",
-    port: 32456,
-  },
   test: {
     globals: true,
     environment: 'jsdom',
